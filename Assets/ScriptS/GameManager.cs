@@ -1,0 +1,52 @@
+﻿using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+public class GameManager : MonoBehaviour
+{
+    public static GameManager instance = null;
+    void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
+    private void Start()
+    {
+        Component(); 
+    }
+
+
+    //インスタンスたちを取得
+    Text Inform;
+    Controller controller;
+    ChangeScene changeScene;
+    ChessAgent chessAgent;
+    public void Component()
+    {
+        Inform = GameObject.Find("Inform").GetComponent<Text>();
+        controller = GameObject.Find("Controller").GetComponent<Controller>();
+        changeScene = this.gameObject.GetComponent<ChangeScene>();
+        chessAgent = GameObject.Find("ChessAgent").GetComponent<ChessAgent>();
+    }
+
+
+    //チェックメイト時の処理
+    public void CHECKMATE()
+    {
+        controller.enabled = false;
+        chessAgent.enabled = false;
+        Inform.text = "CHECKMATE";
+        StartCoroutine(changeScene.Scene("Menu", 5.0f));
+    }
+
+}
+
